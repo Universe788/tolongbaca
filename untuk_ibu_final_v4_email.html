@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Ibu</title>
+<!-- EmailJS: tidak perlu backend/server. Setelah membuat akun EmailJS, isi 3 nilai di bagian EMAIL CONFIG di bawah. -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{
+  --bg:#fff7f5; --card:#fffdfb; --rose:#c77b8b; --rose-dark:#a95f71;
+  --pink:#eab6c0; --cream:#f8e9df; --text:#5d4b52; --muted:#907b82;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 15%,rgba(234,182,192,.28),transparent 25%),
+    radial-gradient(circle at 90% 85%,rgba(175,191,165,.22),transparent 27%),
+    linear-gradient(145deg,#fff9f7,#fdf1ef 55%,#f6f5ed);
+  overflow-x:hidden;
+}
+.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 15px;position:relative}
+.petal{
+  position:fixed;top:-30px;z-index:0;width:10px;height:15px;border-radius:80% 20% 80% 20%;
+  background:#e5aab6;opacity:.4;pointer-events:none;
+  animation:fall linear infinite;
+}
+.petal.green{background:#aebda5}
+@keyframes fall{
+  0%{transform:translate(0,-30px) rotate(0);opacity:0}
+  12%{opacity:.45}
+  50%{transform:translate(55px,55vh) rotate(180deg)}
+  100%{transform:translate(-35px,110vh) rotate(360deg);opacity:0}
+}
+.card{
+  width:min(100%,560px);background:rgba(255,253,251,.9);
+  border:1px solid rgba(255,255,255,.95);border-radius:28px;
+  box-shadow:0 24px 70px rgba(105,70,82,.14);padding:34px 23px;
+  text-align:center;backdrop-filter:blur(10px);
+  animation:enter .7s ease both;position:relative;z-index:2;
+}
+@keyframes enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes leave{to{opacity:0;transform:translateY(-15px)}}
+.flower{font-size:38px;color:var(--rose);margin-bottom:5px}
+.kicker{text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-weight:700;color:var(--rose);margin:0 0 9px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#684e57;margin:0}
+.title{font-size:clamp(2.6rem,12vw,4rem)}
+.subtitle{font-size:.96rem;line-height:1.8;color:var(--muted);max-width:440px;margin:15px auto 25px}
+.divider{height:1px;width:65px;margin:0 auto 23px;background:linear-gradient(90deg,transparent,var(--rose),transparent)}
+.message{text-align:left;background:#fff8f6;border:1px solid #f1e1df;border-radius:20px;padding:18px;margin-bottom:23px}
+.message p{font-size:.92rem;line-height:1.75;margin:0 0 11px}
+.message p:last-child{margin:0}
+.button.secondary{background:transparent;color:var(--rose-dark);border:1px solid #e5c5cb;box-shadow:none}.button.secondary:hover{background:#fff4f5}
+.button{
+  border:0;background:var(--rose);color:white;border-radius:999px;padding:13px 23px;
+  font-weight:700;cursor:pointer;font-size:.9rem;box-shadow:0 9px 22px rgba(199,123,139,.25);
+  transition:.2s;
+}
+.button:hover{background:var(--rose-dark);transform:translateY(-2px)}
+.button:active{transform:scale(.97)}
+.note{font-size:.73rem;color:#a18d93;margin-top:13px}
+
+/* AMPOP */
+.envelope-card{padding-top:30px}
+.envelope-title{font-size:clamp(2.1rem,9vw,3.2rem)}
+.envelope-wrap{width:min(88vw,360px);margin:28px auto 10px;cursor:pointer}
+.envelope{
+  position:relative;width:100%;aspect-ratio:1.55/1;
+  filter:drop-shadow(0 20px 20px rgba(91,65,74,.18));
+  transition:transform .25s ease;
+}
+.envelope:hover{transform:translateY(-4px)}
+.env-back{
+  position:absolute;inset:0;background:#d9899a;border-radius:7px 7px 12px 12px;
+}
+.env-letter{
+  position:absolute;z-index:2;left:9%;top:8%;width:82%;height:86%;
+  background:#fffdfa;border-radius:5px;text-align:center;padding-top:25px;
+  font-family:Georgia,serif;color:#73545e;
+  transition:transform .85s cubic-bezier(.2,.8,.2,1);
+}
+.env-letter:after{
+  content:"";display:block;width:65%;height:1px;background:#eadbd8;
+  margin:15px auto;box-shadow:0 12px 0 #eadbd8,0 24px 0 #eadbd8;
+}
+.env-front{
+  position:absolute;z-index:4;inset:0;background:#e2a2af;border-radius:7px 7px 12px 12px;
+  clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%);
+}
+.env-flap{
+  position:absolute;z-index:6;left:0;top:0;width:100%;height:73%;
+  background:#edc0c8;clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;transition:transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.env-seal{
+  position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-10%);
+  width:46px;height:46px;border-radius:50%;display:grid;place-items:center;
+  background:#ae6175;color:white;border:3px solid #f4d2d8;font-size:18px;
+  transition:opacity .3s;
+}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:1}
+.envelope.open .env-letter{transform:translateY(-115px);z-index:7}
+.envelope.open .env-seal{opacity:0}
+.hint{font-size:.78rem;color:#9a858b;margin:10px 0 0}
+.envelope-btn{margin-top:14px;display:none}
+.envelope-btn.show{display:inline-block}
+
+/* SURAT */
+.letter-card{text-align:left;padding:29px 23px}
+.topline{display:flex;align-items:center;gap:9px;color:#a96878;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+.topline i{height:1px;flex:1;background:#ead5d9}
+.letter-title{font-size:clamp(2.25rem,10vw,3.4rem);margin:22px 0 20px}
+.letter-body{font-family:Georgia,"Times New Roman",serif;font-size:1rem;line-height:1.9;color:#5e5055}
+.letter-body p{margin:0 0 16px}
+.footer{border-top:1px solid #eee0dd;margin-top:24px;padding-top:17px;display:flex;justify-content:space-between;align-items:center}
+.footer span{font-size:.7rem;color:#9b858b}
+.footer .button{padding:11px 18px;font-size:.82rem}
+
+@media(max-width:390px){
+  .card{padding:29px 18px}.message{padding:16px}
+  .envelope-wrap{width:90vw}
+  .letter-body{font-size:.94rem}
+}
+</style>
+</head>
+<body>
+
+<div id="petals"></div>
+
+<main class="page">
+<section class="card" id="screen">
+  <div class="flower">✿</div>
+  <p class="kicker">Sebuah surat kecil</p>
+  <h1 class="title">Untuk Ibu</h1>
+  <p class="subtitle">Ada sesuatu yang selama ini sulit aku ucapkan secara langsung. Jadi kali ini, aku mencoba menuliskannya untuk Ibu.</p>
+  <div class="divider"></div>
+  <div class="message">
+    <p><strong>Bu, sebelum membaca surat ini, boleh aku minta satu hal?</strong></p>
+    <p>Tolong baca surat ini pelan-pelan sampai selesai, ya. Aku menulis ini bukan untuk membuat Ibu marah.</p>
+    <p>Bukan juga untuk membuat Ibu khawatir. Aku hanya ingin menceritakan apa yang sebenarnya sedang ada di pikiranku.</p>
+    <p>Aku tidak meminta Ibu langsung menemukan solusi. Aku cuma ingin didengarkan dulu.</p>
+  </div>
+  <button class="button" onclick="showEnvelope()">Lanjut, Bu →</button>
+  <div class="note">Pelan-pelan saja.</div>
+</section>
+</main>
+
+<script>
+/* ================= EMAIL CONFIG =================
+   Ganti 3 nilai di bawah dengan data dari EmailJS.
+   PUBLIC KEY aman diletakkan di frontend; keamanan pengiriman diatur lewat EmailJS.
+*/
+const EMAIL_CONFIG = {
+  publicKey: "GANTI_PUBLIC_KEY",
+  serviceId: "GANTI_SERVICE_ID",
+  templateId: "GANTI_TEMPLATE_ID"
+};
+
+emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
+
+function makePetals(){
+  const box=document.getElementById("petals");
+  box.innerHTML="";
+  for(let i=0;i<24;i++){
+    const p=document.createElement("span");
+    p.className="petal"+(i%5===0?" green":"");
+    p.style.left=Math.random()*100+"vw";
+    p.style.width=(7+Math.random()*8)+"px";
+    p.style.height=(10+Math.random()*10)+"px";
+    p.style.animationDuration=(9+Math.random()*10)+"s";
+    p.style.animationDelay=(-Math.random()*18)+"s";
+    box.appendChild(p);
+  }
+}
+makePetals();
+
+function showEnvelope(){
+  const screen=document.getElementById("screen");
+  screen.style.animation="leave .45s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card envelope-card">
+        <div class="flower">✿</div>
+        <p class="kicker">Untuk Ibu</p>
+        <h1 class="envelope-title">Ada surat untuk Ibu</h1>
+        <p class="subtitle">Buka amplopnya untuk melanjutkan.</p>
+
+        <div class="envelope-wrap" onclick="openEnvelope()">
+          <div class="envelope" id="envelope">
+            <div class="env-back"></div>
+            <div class="env-letter">Untuk Ibu</div>
+            <div class="env-flap"></div>
+            <div class="env-front"></div>
+            <div class="env-seal">♥</div>
+          </div>
+        </div>
+
+        <p class="hint" id="hint">Klik amplop untuk membukanya</p>
+        <button class="button envelope-btn" id="openButton" onclick="openLetter()">Buka surat →</button>
+      </section>
+    `;
+  },450);
+}
+
+function openEnvelope(){
+  const env=document.getElementById("envelope");
+  if(env.classList.contains("open")) return;
+  env.classList.add("open");
+  document.getElementById("hint").textContent="Amplop terbuka.";
+  setTimeout(()=>document.getElementById("openButton").classList.add("show"),800);
+}
+
+function openLetter(){
+  const card=document.querySelector(".envelope-card");
+  card.style.animation="leave .45s ease forwards";
+  setTimeout(()=>showLetter1(),450);
+}
+
+function showLetter1(){
+  document.querySelector(".page").innerHTML=`
+    <section class="card letter-card">
+      <div class="topline"><span>01</span><i></i><span>Surat untuk Ibu</span></div>
+      <h1 class="letter-title">Maaf, Bu</h1>
+      <div class="letter-body">
+        <p>Ibu, sebenarnya aku nggak tahu harus mulai dari mana.</p>
+        <p>Ada banyak hal yang selama ini ingin aku ceritakan kepada Ibu, tapi aku nggak berani mengatakannya secara langsung.</p>
+        <p>Bukan karena aku nggak percaya sama Ibu. Justru karena aku terlalu sayang dan takut membuat Ibu kecewa.</p>
+        <p>Jadi kali ini aku memilih untuk menuliskannya.</p>
+        <p>Aku ingin Ibu tahu apa yang sebenarnya sedang terjadi di dalam diriku.</p>
+        <p>Aku ingin minta maaf, Bu. Maaf kalau selama ini aku belum menjadi anak yang seperti Ibu harapkan.</p>
+      </div>
+      <div class="footer"><button class="button secondary" onclick="showEnvelope()">← Kembali</button><span>01 / surat</span><button class="button" onclick="showLetter2()">Lanjut →</button></div>
+    </section>
+  `;
+}
+
+function showLetter2(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>02</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Tentang kuliahku</h1>
+        <div class="letter-body">
+          <p>Aku sebenarnya suka komputer. Aku suka membuat sesuatu, mencoba hal baru, dan membayangkan bisa membuat game sendiri.</p>
+          <p>Tapi ketika masuk Informatika, ternyata semuanya jauh lebih sulit dari yang aku bayangkan.</p>
+          <p>Matematika dan coding sering membuatku kesulitan. Kadang aku melihat teman-teman sudah memahami hal yang menurutku masih membingungkan.</p>
+          <p>Itu membuatku sering merasa tertinggal dan bertanya-tanya apakah aku memang cocok di jurusan ini.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter1()">← Kembali</button><span>02 / surat</span><button class="button" onclick="showLetter3()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter3(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>03</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Aku sebenarnya sedang capek</h1>
+        <div class="letter-body">
+          <p>Dari luar mungkin aku terlihat biasa saja. Aku masih kuliah, masih menjalani hari-hari seperti biasanya, dan masih melakukan banyak hal seperti biasa.</p>
+          <p>Tapi sebenarnya, di dalam kepala aku sering merasa berantakan.</p>
+          <p>Aku sudah menjalani kuliah lebih dari satu tahun, tapi kadang aku merasa belum mendapatkan sesuatu yang benar-benar bisa aku banggakan.</p>
+          <p>Ketika melihat teman-teman berkembang, aku malah sering merasa tertinggal. Dan semakin sering membandingkan diri, semakin aku merasa tidak cukup baik.</p>
+          <p>Ada saatnya aku merasa seperti gagal. Bahkan pernah sampai menangis karena merasa sudah membuat kesalahan besar dalam hidupku.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter2()">← Kembali</button><span>03 / surat</span><button class="button" onclick="showLetter4()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter4(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>04</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Tentang uang Ibu</h1>
+        <div class="letter-body">
+          <p>Aku tahu Ibu mengeluarkan banyak hal untuk kuliahku. Tempat tinggal, laptop, uang, dan berbagai fasilitas yang aku butuhkan.</p>
+          <p>Aku tahu semua itu adalah kesempatan yang tidak semua orang punya.</p>
+          <p>Karena itu, ketika aku merasa tidak berkembang, aku sering merasa bersalah. Aku takut semua yang Ibu berikan justru terasa sia-sia.</p>
+          <p>Aku takut Ibu berpikir, “Ibu sudah memberikan semuanya, kenapa kamu masih seperti ini?”</p>
+          <p>Tapi aku tidak pernah berniat menyia-nyiakan apa yang Ibu berikan. Aku ingin berhasil. Aku ingin suatu hari bisa membuat Ibu bangga.</p>
+          <p>Aku hanya belum tahu bagaimana caranya.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter3()">← Kembali</button><span>04 / surat</span><button class="button" onclick="showLetter5()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter5(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>05</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Aku bukan tidak mau berusaha</h1>
+        <div class="letter-body">
+          <p>Mungkin dari luar kadang terlihat seperti aku tidak berusaha. Dan aku mengakui, ada bagian dari diriku yang memang masih banyak salahnya.</p>
+          <p>Aku mencoba memahami pelajaran, mencoba mengikuti coding, dan mencoba mengejar hal-hal yang belum aku mengerti.</p>
+          <p>Tapi aku sering takut bertanya ketika tidak paham. Aku malu ketika merasa tertinggal.</p>
+          <p>Nilai yang buruk membuatku kecewa pada diri sendiri. Setelah itu semangatku turun, lalu aku semakin tertinggal. Rasanya seperti lingkaran yang sulit dihentikan.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter4()">← Kembali</button><span>05 / surat</span><button class="button" onclick="showLetter6()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter6(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>06</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Aku masih punya sesuatu yang aku suka</h1>
+        <div class="letter-body">
+          <p>Aku masih suka komputer. Aku masih suka membuat sesuatu dan bermain dengan ide-ide tentang game.</p>
+          <p>Aku senang ketika berhasil membuat sesuatu dan melihat hasilnya menjadi nyata.</p>
+          <p>Memang, sering kali aku belum bisa membuat semuanya dari awal. Aku masih membutuhkan contoh, tutorial, bantuan, atau orang lain untuk memahami coding.</p>
+          <p>Itu kadang membuatku merasa bahwa aku sebenarnya belum mampu.</p>
+          <p>Tapi mungkin... aku memang masih sedang belajar.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter5()">← Kembali</button><span>06 / surat</span><button class="button" onclick="showLetter7()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter7(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>07</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Yang sebenarnya aku butuhkan</h1>
+        <div class="letter-body">
+          <p>Aku tidak ingin Ibu langsung marah ketika membaca ini.</p>
+          <p>Aku juga tidak ingin Ibu langsung mengambil keputusan untukku.</p>
+          <p>Aku hanya ingin didengarkan dulu.</p>
+          <p>Aku ingin bisa bilang, “Bu, aku sedang kesulitan,” tanpa takut membuat Ibu kecewa.</p>
+          <p>Aku takut gagal. Takut mengecewakan Ibu. Takut membuat uang yang Ibu keluarkan menjadi sia-sia.</p>
+          <p>Dan mungkin, yang paling aku takutkan adalah mengecewakan Ibu.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter6()">← Kembali</button><span>07 / surat</span><button class="button" onclick="showLetter8()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter8(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>08</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Aku ingin mencoba memperbaikinya</h1>
+        <div class="letter-body">
+          <p>Aku belum tahu apakah jurusan ini benar-benar cocok untukku. Aku juga belum tahu apakah aku bisa menjadi programmer yang hebat.</p>
+          <p>Tapi aku tidak ingin terus seperti ini.</p>
+          <p>Aku ingin mencoba memperbaiki semuanya sedikit demi sedikit. Belajar lagi dari dasar, mencari tahu bagian mana yang sebenarnya membuatku kesulitan, bertanya ketika tidak mengerti, dan menjadi lebih baik.</p>
+          <p>Aku mungkin belum punya jawaban untuk semuanya sekarang.</p>
+          <p>Tapi aku masih ingin mencoba mencari jalanku.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter7()">← Kembali</button><span>08 / surat</span><button class="button" onclick="showLetter9()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter9(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>09</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Bu...</h1>
+        <div class="letter-body">
+          <p>Maaf kalau selama ini aku terlihat seperti tidak bersyukur.</p>
+          <p>Sebenarnya aku sangat bersyukur. Aku tahu aku sudah diberikan banyak hal oleh Ibu.</p>
+          <p>Justru karena aku tahu itu, aku merasa semakin bersalah ketika melihat diriku sekarang.</p>
+          <p>Aku tidak menyerah karena aku tidak peduli.</p>
+          <p>Aku justru takut karena aku sangat peduli.</p>
+          <p>Aku ingin berhasil. Aku ingin suatu hari bisa mengatakan kepada Ibu, “Semua yang Ibu berikan ke aku tidak sia-sia.”</p>
+          <p>Aku mungkin belum bisa mengatakan itu sekarang. Tapi aku ingin terus mencoba sampai menemukan jalanku.</p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter8()">← Kembali</button><span>09 / surat</span><button class="button" onclick="showLetter10()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showLetter10(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>10</span><i></i><span>Surat untuk Ibu</span></div>
+        <h1 class="letter-title">Terima kasih, Bu</h1>
+        <div class="letter-body">
+          <p>Terima kasih karena sudah membiayai kuliahku, menyediakan banyak hal untukku, mempercayaiku, dan memberiku kesempatan.</p>
+          <p>Maaf karena sampai sekarang aku belum bisa membalas semua itu dengan sesuatu yang membuat Ibu bangga.</p>
+          <p>Aku tidak meminta Ibu menyelesaikan semuanya untukku. Aku hanya ingin Ibu berjalan bersamaku untuk sementara.</p>
+          <p>Aku ingin bisa bercerita tanpa takut. Aku ingin dibantu menemukan jalan, bukan hanya dinilai dari hasil akhirnya.</p>
+          <p>Aku sayang Ibu.</p>
+          <p>Kalau selama ini aku lebih sering diam, bukan berarti aku tidak peduli. Aku hanya tidak tahu bagaimana cara mengatakannya.</p>
+          <p><strong>Maaf, Bu. Terima kasih, Bu. Dan tolong, jangan anggap aku sudah menyerah. Aku masih ingin mencoba.</strong></p>
+        </div>
+        <div class="footer"><button class="button secondary" onclick="showLetter9()">← Kembali</button><span>10 / surat</span><button class="button" onclick="showResponse()">Lanjut →</button></div>
+      </section>
+    `;
+  },400);
+}
+
+function showResponse(){
+  const card=document.querySelector(".letter-card");
+  card.style.animation="leave .4s ease forwards";
+  setTimeout(()=>{
+    document.querySelector(".page").innerHTML=`
+      <section class="card letter-card">
+        <div class="topline"><span>Terakhir</span><i></i><span>Untuk Ibu</span></div>
+        <h1 class="letter-title">Sekarang giliran Ibu</h1>
+        <div class="letter-body">
+          <p>Setelah membaca semuanya, aku ingin mendengar dari Ibu.</p>
+          <p>Apa yang Ibu rasakan? Apa nasihat atau pesan Ibu untuk aku?</p>
+        </div>
+        <textarea id="ibuReply" placeholder="Tulis pesan Ibu di sini..." style="width:100%;min-height:150px;border:1px solid #ead9dc;border-radius:18px;padding:15px;font:inherit;line-height:1.6;color:#5d4b52;background:#fffaf8;resize:vertical;outline:none"></textarea>
+        <div class="footer">
+          <span>Pesan untuk Ibu</span>
+          <button class="button" id="sendReplyBtn" onclick="finish()">Kirim pesan →</button>
+        </div>
+      </section>
+    `;
+  },400);
+}
+
+async function finish(){
+  const reply=document.getElementById("ibuReply").value.trim();
+  const btn=document.getElementById("sendReplyBtn");
+  if(!reply){alert("Tulis pesan Ibu dulu, ya.");return}
+
+  if(EMAIL_CONFIG.publicKey.includes("GANTI_") ||
+     EMAIL_CONFIG.serviceId.includes("GANTI_") ||
+     EMAIL_CONFIG.templateId.includes("GANTI_")){
+    alert("Email belum dikonfigurasi. Isi Public Key, Service ID, dan Template ID dari EmailJS di bagian EMAIL CONFIG pada file HTML.");
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent="Mengirim...";
+
+  try{
+    await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+      message: reply,
+      reply_message: reply,
+      subject: "Pesan dari Ibu — Untuk Ibu",
+      time: new Date().toLocaleString("id-ID", { dateStyle:"full", timeStyle:"short" })
+    });
+
+    document.querySelector(".page").innerHTML=`
+      <section class="card">
+        <div class="flower">✿</div>
+        <p class="kicker">Terima kasih</p>
+        <h1 style="font-size:clamp(2.2rem,10vw,3.4rem)">Aku sayang Ibu.</h1>
+        <p class="subtitle">Terima kasih sudah membaca sampai selesai dan mau mendengarkan aku.</p>
+        <div class="divider"></div>
+        <p style="color:#907b82;line-height:1.8">Pesan Ibu sudah dikirim. 🤍</p>
+      </section>
+    `;
+  }catch(error){
+    console.error("EmailJS error:", error);
+    btn.disabled=false;
+    btn.textContent="Kirim pesan →";
+    alert("Pesannya belum berhasil dikirim. Coba lagi atau periksa konfigurasi EmailJS.");
+  }
+}
+</script>
+</body>
+</html>
